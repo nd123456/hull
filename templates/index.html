@@ -1,0 +1,90 @@
+{% extends "layout.html"%}
+{% block title %}
+Hull Damage Classifier
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+    <header class="text-white text-center">
+        <h1 class="display-4">Hull Damage Classifier</h1>
+        <p class="lead mb-5">A webapp to classify damage to hull. Drop an image of hull to assess damage</p>
+    </header>
+
+    <div class="row py-4">
+        <div class="col-lg-6 mx-auto">
+
+            <!-- Upload image input-->
+            <form action="{{ url_for('predict_image_file') }}" enctype="multipart/form-data" method="POST">
+                <div class="input-group mb-3 px-2 py-2 rounded-pill bg-white shadow-sm">
+                    <input class="form-control border-0" id="upload" name="files[]" type="file" multiple onchange="displayFileNames(this)">
+                    <label class="font-weight-light text-muted" for="upload" id="upload-label">Choose file</label>
+                    <div class="input-group-append">
+                        <label class="btn btn-light m-0 rounded-pill px-4" for="upload">
+                            <i class="fa fa-cloud-upload mr-2 text-muted"></i>
+                            <small class="text-uppercase font-weight-bold text-muted">Choose file</small>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Uploaded image area-->
+                <p class="font-italic text-white text-center">The image uploaded will be rendered inside the box below.</p>
+                <div id="imageArea" class="image-area mt-4"></div>
+
+                <!-- Submit button-->
+                <div class="container">
+                    <div class="row">
+                        <div class="col text-center">
+                            <input class="btn btn-primary my-3" type="submit"/>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    .image-area .image-container {
+        margin-bottom: 20px; /* Increase this value for more spacing */
+        text-align: center;
+    }
+    .image-area img {
+        display: block;
+        margin: 0 auto;
+    }
+</style>
+
+<script>
+    function displayFileNames(input) {
+        document.getElementById("imageArea").innerHTML = "";  // Clear previous images
+        for (var i = 0; i < input.files.length; i++) {
+            displayImage(input.files[i]);
+        }
+         // Clear the input value to remove file names from the box
+    }
+
+    function displayImage(file) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var container = document.createElement("div");
+            container.classList.add("image-container");
+
+            var img = document.createElement("img");
+            img.src = e.target.result;
+            img.classList.add("img-fluid", "rounded", "shadow-sm");
+
+            var caption = document.createElement("p");
+            caption.textContent = file.name;
+            caption.classList.add("text-white");
+
+            container.appendChild(img);
+            container.appendChild(caption);
+            document.getElementById("imageArea").appendChild(container);
+        }
+        reader.readAsDataURL(file);
+    }
+</script>
+
+{% endblock %}
