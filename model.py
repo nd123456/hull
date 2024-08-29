@@ -10,7 +10,7 @@ import io
 
 
 # Load the pre-trained model
-resnet_model = load_model('C:/Users/Namya/Documents/GSL HULL/model.h5')
+resnet_model = load_model('model.h5')
 
 # Define class names
 class_names = ['Crazing', 'Inclusion', 'Patches', 'Pitted', 'Rolled', 'Scratches']
